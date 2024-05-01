@@ -1,0 +1,53 @@
+--- 錯誤處理 ---
+catcher 與 throw 相對於函數的 function 與 return
+與 function 不同的是 throw 可以在非 catcher 區塊內使用
+
+throw 後續可以接著任何值
+catcher 會捕獲返回任何 throw 的值並退出區塊
+catcher 區塊內的變數繼承自上一個區塊
+
+
+--- 範例1 ---
+something = 10;
+catchSomething = catcher {
+    if(something == 10){
+        print("something == 10");
+        throw "error 1";
+    } else if(something == 20) {
+        print("something == 20");
+        throw "error 2";
+    }
+    print("other");
+}
+print("step");
+
+if(catchSomething != null) {
+    print(catchSomething);
+}
+
+輸出 :
+something == 10
+step
+error 1
+
+--- 範例2 ---
+something = 10;
+
+fun = function() {
+    throw "error 1";
+}
+
+catchSomething = catcher {
+    fun();
+    print("other");
+}
+print("step");
+
+if(catchSomething != null) {
+    print(catchSomething);
+}
+
+輸出 :
+step
+error 1
+

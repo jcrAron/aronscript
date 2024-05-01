@@ -1,0 +1,36 @@
+AronScript 是腳本語言，用於對設定檔內的數值做複雜的關聯設定
+
+副檔名 as 是 AronScript 的文字檔
+只接受 utf-8 編碼
+對空白不敏感
+要在最後加上分號(;)，除了以大擴號結束的句子
+
+命名規則
+- 可以包含下底線(_)、數字、英文字母
+- 第一個字元不能是數字
+- 不接受所有全形字元(U+FF00 到 U+FFEF)
+
+命名約定
+- 用駝峰的方式命名
+- 全部大寫並搭配下底線為常數方法、變數，例如 UPPER_CASE
+- 一個下底線開頭的名稱為私有方法、變數，例如 _myFunction
+- 前面和後面兩個下底線為魔術方法，AronScript 對值操作時調用的方法，例如 __add__
+
+函數約定
+- 每一個可傳入的參數都應指定預設值
+
+例如
+printABC = function(a=1, b=2, c=3){
+    print(a);
+	print(b);
+	print(c);
+}
+printABC(a=10, b=20, c=30);
+
+而不是
+printABC = function(a=1, b=2){
+    print(a);
+	print(b);
+	print(c);
+}
+printABC(a=10, b=20, c=30);

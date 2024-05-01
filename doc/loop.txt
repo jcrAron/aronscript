@@ -1,0 +1,45 @@
+-- while ---
+while 語法與 java 的 while 語法相識，在 while 後面的小括號中的帶入判斷式
+* CONDITION 每次執行 BODY 前會執行一次 CONDITION，如果 CONDITION 執行結果為 false 則會退出 while。
+  這個區塊內只能包含一組運算，且運算結果必須為 boolean 值，不能為 null。
+  此欄位必須填寫內容。
+
+while (CONDITION) {
+    BODY
+}
+
+
+--- for --- 考慮棄用!或是改語法
+基本的 for 語法與 java 的 for 語法相識，在 for 後面的小括號中包含三個用分號分隔的參數
+* INITIALIZATION 是用來設定這個 for 區塊的區域變數。如果包含多個變數則用逗號分隔。
+  此欄位可以不填寫內容。
+* CONDITION 每次執行 BODY 前會執行一次 CONDITION，如果 CONDITION 執行結果為 false 則會退出 for。
+  這個區塊內最多只能包含一組運算，且運算結果必須為 boolean 值，不能為 null。
+  如果此欄位不填寫內容，則此 for 迴圈為無窮迴圈。
+* AFTERTHOUGHT 每次執行完 BODY後會執行一次 AFTERTHOUGHT。如果包含多個運算式則用逗號分隔。
+  此欄位可以不填寫內容。
+
+for (INITIALIZATION; CONDITION; AFTERTHOUGHT) {
+    BODY
+}
+
+範例:
+a = 1;
+for (a=10, b=a; a<40; a+=10, b+=1) {
+    print("a=" + string(a) + ", b=" + string(b));
+}
+print("a=" + string(a) + ", b=" + string(b));
+
+
+輸出:
+a=10, b=10
+a=20, b=11
+a=30, b=12
+a=1, b=null
+
+--- continue, break ---
+與 java 不同的是，continue 及 break 目前不支援label的語法
+- continue 將會跳過此次執行BODY中後續的內容
+- break 將會跳出當前迴圈
+
+

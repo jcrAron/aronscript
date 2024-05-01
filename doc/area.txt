@@ -1,0 +1,151 @@
+Q:  基本區塊 for、while、if-else、catcher 等，是否要只傳入當前變數表，沒有區塊變數的概念?
+A1: 如果有區塊變數的概念，那麼執行AS檔案或執行 function 的時候只能傳入標準的 table，標準 table 具體是甚麼不重要，讓建立基本區塊的時候，可以依照可預期的步驟去繼承上一個區域變數
+    缺點: AS變得沒特色?
+	      如何實作變更變數表? 
+A2: 如果沒有區塊變數，則基本區塊會直接傳入當前變數表
+    缺點: 變數表汙染，例如 for 時需要一個臨時的變數，如果不要汙染還區要特別設定
+A3: 顯式的寫上"變更變數表"才能變更，例如 area(table(...)){ ... } ，基本區塊和 function 都用標準變數表，
+
+Q:  變更變數表有什麼好處?
+A1: 壞處: 如果沒有明顯的寫出來，會無法預期執行後會有什麼結果
+A2: 好處: 可以用來做一些特殊控制，例如: "當賦值時可以額外做一些事"、"當取值時新建一個值，而不是拿舊的值"、"當賦值或取值時回傳一個錯誤" 等
+A3: 
+
+Q:  AS 的目標是甚麼?
+A1: 讓設定 config 可以變得更方便
+A2: 設定重複的值或是需要特定運算等操作可以簡化
+A3: 
+
+Q:  AS 的特色要有甚麼，如果沒特色要如何包裝?
+A1: 可以傳入自訂的區塊變數?
+
+Q:  如果只能使用標準 table 來執行 AS 檔案，並且不使用區塊變數
+A1: 不使用區塊變數就要重新設計基本區塊的語法，來避免與 function 的區塊行為看起來不一致的問題，基本區塊可以考慮使用 if ... than ... else ... fi 的形式
+A2: 如果需要傳入已經定義好的 table 作為"變數表" <- 需要這個功能嗎? 如果基礎環境需要外部傳入參數才能正確使用，那麼單就 AS 會看不出來需要甚麼參數才能啟動
+A3: 如果需要傳入已經定義好的 table 作為"輸入參數"，需要定義一個地方來儲存，可以考慮使用 import("stdlib/args").getParam("arg1") 的形式來取得值
+    import 
+
+Q:  如果只能使用標準 table 來執行 AS 檔案，並且不使用區塊變數
+
+
+Q:  不能用任何 table 作為輸入參數來執行 AS 檔案(傳入參數放到一個特定的路徑下)，且不使用區域變數
+A:  
+
+結論:
+- 預設情況下，呼叫 function 及執行 AS 檔案傳入標準的 env 變數表
+- function 仍然可以用比較簡單的方式傳入自訂的 env 變數表
+- AS 檔案需要用比較困難(或非標準的方式)，傳入自訂的 env 變數表
+  - 原因: 當開發者單獨看一個 AS 檔案時，都會用標準的方式來解讀，而不是用
+- 基本區塊內(for、while、if-else、catcher)沒有區域變數
+- 執行 AS 檔案時傳入參數後，則放到指定的地址，例如: args=import("lib/args"); print(args["a"]);
+
+
+
+--- for、while、if-else、catcher 定義 ---
+立即執行，自動傳入當前變數表
+for、while、if-else 不回傳值
+catcher 回傳 throw 的值
+
+--- function 定義 ---
+回傳可執行函數
+定義 function 時
+- 小括號內只會執行一次
+- 傳入參數只接受"只有 env 參數"和"完全沒有 env 參數"
+- 完全沒有設定 env 參數時，呼叫函數時將會淺複製預設參數並用呼叫時的參數覆蓋來執行程式區塊
+- 只有 env 參數時，呼叫函數時將會直接用此 table (不會複製)作為變數表
+
+呼叫 function 時
+- 傳入參數只接受"只有 env 參數"和"完全沒有 env 參數"，可以跟定義 function 時不一致
+- 傳入 env 將會覆蓋定義時的預設參數
+
+如果傳入參數的預設值是一個可變內容的值，例如 table，則每次呼叫這個函數會取得同一個值，參考範例2
+傳入的參數順序為"序列"之後是"鍵值組"，參考範例3
+如果傳入的參數名稱不是純字串，可以用中括號包圍值來設定參數，參考範例3
+執行後回傳 return 的值，若區塊內沒有明顯的寫上 return 則預設回傳 null
+
+--- 取得當前區域的變數表 ---
+關鍵字 env 可以取得當前區域的變數表
+如果 env 內的鍵包含關鍵字，則直譯器應該以關鍵字所指的意思來執行，而不是呼叫 env 內的值
+如果不指定 env 為特定 table 時，不保證同一個程式區塊每次執行 env 的地址都一樣
+無法直接使用 "env=table()" 變更當前區塊的 env ，只能使用 "function(env=table()){ ... }" 來變更 env
+
+--- 範例 ---
+printAB = function(env=null){
+    print("a=" + string(a) + ", b=" + string(b));
+}
+
+a=1;
+b=2;
+print("start of program:");
+printAB(env=env);
+fun = function(a=10, printAB=printAB){
+    print("in function:");
+    printAB(env=env);
+}
+fun();
+print("end of program:");
+printAB(env=env);
+
+輸出:
+start of program:
+a=1, b=2
+in function:
+a=10, b=null
+end of program:
+a=1, b=2
+
+
+--- 範例2 ---
+printAB = function(env=null){
+    print("a=" + string(a) + ", t[\"b\"]=" + string(t["b"]));
+}
+
+normalFunction = function(a=10, t=table(b=20), _printAB=printAB){
+    a+=1;
+	t["b"]+=1;
+    _printAB(env=env);
+}
+
+envFunction = function(env=table(a=10, t=table(b=20),  _printAB=printAB)){
+    a+=1;
+	t["b"]+=1;
+    _printAB(env=env);
+}
+
+print("normalFunction:");
+normalFunction();
+normalFunction();
+
+print("envFunction:");
+envFunction();
+envFunction();
+
+輸出:
+normalFunction:
+a=11, t["b"]=21
+a=11, t["b"]=22
+envFunction:
+a=11, t["b"]=21
+a=12, t["b"]=22
+
+
+--- 範例3 ---
+hello="helloData";
+
+func = function("0", "1", "2", [100]="100", [true]="true!", [hello]="world!"){
+	print(env[0]);
+	print(env[1]);
+	print(env[2]);
+	print(env[100]);
+	print(env[true]);
+	print(env["helloData"]);
+}
+func([100]="200", [2]="20")
+
+輸出:
+0
+1
+20
+200
+true!
+world!

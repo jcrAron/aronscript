@@ -1,0 +1,42 @@
+--- 保留字 ---
+無
+
+--- 變數、常數表 ---
+AronScript (包含內置函數、暫存區)
+
+env (取得當前區變數的變數表)
+
+null
+
+--- 基礎類型 ---
+table
+
+number
+
+string
+
+--- 循環 ---
+while
+
+for
+
+continue
+
+break
+
+--- 條件語句 ---
+# 不做switch 、 case
+
+if
+
+else
+
+--- 函數 ---
+function
+
+return
+
+--- 錯誤處理 ---
+catcher
+
+throw

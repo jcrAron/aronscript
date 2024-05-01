@@ -1,0 +1,148 @@
+以換行符號\n分割每組指令
+以空格符號分割指令以及後續的參數
+
+--- 註釋 ---
+用 "// " 表示註釋
+// 123456
+
+--- 編譯器優化 ---
+要放在整個程式的開頭才會被執行
+以!開頭
+
+!LABEL 設定標籤的固定值B，B只能是數字
+!LABEL :A B
+
+!DATA 設定暫存區A的初始值B
+!DATA A B
+
+--- 特殊控制指令 ---
+特殊控制指令都是以@為開頭
+
+暫存區A指定為B
+@MOVE A B
+
+定義:A為$PC，@LABEL標記的標籤不可以重複
+優化: 如果:A被取代成固定值，則執行程式時會忽略此指令
+@LABEL :A
+
+跳至指定的位置
+@JUMP :A
+
+如果$OUT是false，則跳至:A，
+@IF_FALSE :A
+
+在$ENV堆疊上加入B，在$STACK上加入$PC，並跳至:A
+@CALL :A B
+
+在$STACK上加入:A
+@CATCH :A
+
+設定A到$OUT，並拋出，會pop $BACKTRACK_STACK 直到是 @CATCH 定義的PC位置
+@THROW A
+
+設定A到$OUT，並拋出，會pop $BACKTRACK_STACK 直到是 @CALL 定義的PC位置
+@RETURN A
+
+--- 標籤 ---
+以:開頭，後面的字元只能是英文字母、下划線、數字，有區分大小寫
+優化: 執行程式時標籤會全部取代成固定值
+:123_abc_ABC
+
+--- 特殊暫存區 ---
+特殊暫存區以$開頭，有區分大小寫
+
+當前區域變數表，資料結構是stack
+$ENV
+
+前一個魔術方法回傳的值，NULL 代表未設置。如果前一個指令不是魔術方法，則$OUT為NULL
+$OUT
+
+當前的程式計數器，0和正整數，若$PC為-1則程式直接結束
+$PC
+
+包括catcher結尾和call時的$PC位置，讓@RETURN或@THROW時，可以正確的跳至正確的地址和彈出$ENV
+資料結構是stack
+$BACKTRACK_STACK
+
+--- 臨時暫存區 ---
+臨時暫存區都是以$_開頭，後面的字元只能是英文字母、下划線、數字，有區分大小寫
+預設值為 NULL
+$_123_ABC_abc
+
+--- 新的table ---
+新建一個table放到$OUT
+@NEW_TABLE
+
+--- 呼叫魔術方法的指令 ---
+魔術方法沒有前綴
+第一個參數固定是即將呼叫魔術方法的data
+優化: 當後面帶上的參數是固定值，則在編譯時預先運算
+HASH
+APPLY
+STRING
+INDEX
+ASSIGN
+EQUAL
+NOT_EQUAL
+GREATER_THAN
+LESS_THAN
+GREATER_EQUAL
+LESS_EQUAL
+LOGICAL_NOT
+UNARY_PLUS
+UNARY_MINUS
+ADD
+SUB
+MULTI
+DIV
+MOD
+RIGHT_SHIFT
+LEFT_SHIFT
+AND
+OR
+XOR
+BITWISE_NOT
+POW
+
+--- 固定值 ---
+
+空指標
+null
+
+布林值
+true
+false
+
+
+數字和字串固定值編碼方式:
+第一個byte裡面
+1 1 11 1111
+* 第1位元
+    * 0 代表後續第2~8位是正整數，可以表示 0~127
+	* 1 代表後續幾個位元需要解碼
+* 第2位元
+  * 0 代表cache的地址，後面第3~8位元代表cache的地址，可以表示0~63
+  * 1 後面攜帶n個byte的資料，
+    * 第3位代表後續的是否擴展長度，如果後續的byte大於8個可以使用這個。第6~8位元代表後續有幾個byte是"資料的長度"，
+	  * 0 為擴展
+	  * 1 為不擴展
+    * 第4~5位代表後續的byte要解碼成什麼
+	  * 00 string (utf-8編碼)
+	  * 01 number (utf-8編碼，用10進位表示數字，可以是浮點數或整數)
+	  * 10 cache address
+	  * 11 object  (包含table或一般類型，格式未定，先保留)
+    * 第6~8位元代表後續有多少個byte是同一筆資料，(0~7)再加1，所以可以表示1~8個
+cache address
+	* NULL    0
+	* TRUE    1
+	* FALSE   2
+	* OUTPUT  3
+	* ENV     4
+
+數字，用+或-開頭或數字開頭
+-123.456
+
+字串，用雙引號包圍字串，支援跳脫字符(反斜線)
+"text"
+
+

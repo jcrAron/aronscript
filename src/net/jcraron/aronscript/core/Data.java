@@ -1,0 +1,47 @@
+package net.jcraron.aronscript.core;
+
+import net.jcraron.aronscript.core.base.BooleanData;
+import net.jcraron.aronscript.core.base.ClassData;
+import net.jcraron.aronscript.core.base.NumberData;
+
+public class Data implements MagicFunctions {
+
+	public ReturnThrowDataSet __class__() {
+		return new ClassData(this.getClass()).returnThis();
+	}
+
+	public final static ReturnThrowDataSet operate(Data self, Operator op, Data... values) {
+		return MagicFunctions.operate(self, op, values);
+	}
+
+	public final ReturnThrowDataSet operate(Operator op, Data... values) {
+		return MagicFunctions.operate(this, op, values);
+	}
+
+	public final ReturnThrowDataSet operate(String op, Data... values) {
+		return MagicFunctions.operate(this, Operator.find(op), values);
+	}
+
+	@Override
+	public ReturnThrowDataSet __hash__() {
+		return NumberData.valueOf(this.hashCode()).returnThis();
+	}
+
+	@Override
+	public ReturnThrowDataSet __equal__(Data other) {
+		return BooleanData.valueOf(this.equals(other)).returnThis();
+	}
+
+	@Override
+	public ReturnThrowDataSet __notEqual__(Data other) {
+		return BooleanData.valueOf(!this.equals(other)).returnThis();
+	}
+
+	public final ReturnThrowDataSet returnThis() {
+		return ReturnThrowDataSet.returnData(this);
+	}
+
+	public final ReturnThrowDataSet throwThis() {
+		return ReturnThrowDataSet.throwData(this);
+	}
+}
