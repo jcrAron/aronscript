@@ -26,7 +26,7 @@ public final class BooleanData extends Data {
 	}
 
 	static ReturnThrowDataSet returnValue(boolean value) {
-		return BooleanData.valueOf(value).throwThis();
+		return BooleanData.valueOf(value).returnThis();
 	}
 
 	@Override

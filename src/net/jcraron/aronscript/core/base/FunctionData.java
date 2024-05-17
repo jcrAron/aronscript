@@ -8,7 +8,7 @@ public abstract class FunctionData extends Data {
 	public final static ClassData CLASS = new ClassData(FunctionData.class);
 
 	@Override
-	public abstract ReturnThrowDataSet __apply__(Data args);
+	public abstract ReturnThrowDataSet __apply__(Data args, Data code);
 
 	@Override
 	public ReturnThrowDataSet __class__() {

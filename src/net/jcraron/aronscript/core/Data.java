@@ -3,8 +3,11 @@ package net.jcraron.aronscript.core;
 import net.jcraron.aronscript.core.base.BooleanData;
 import net.jcraron.aronscript.core.base.ClassData;
 import net.jcraron.aronscript.core.base.NumberData;
+import net.jcraron.aronscript.core.base.StringData;
+import net.jcraron.aronscript.core.special.NullData;
 
 public class Data implements MagicFunctions {
+	public final static Data NULL = NullData.INSTANCE;
 
 	public ReturnThrowDataSet __class__() {
 		return new ClassData(this.getClass()).returnThis();
@@ -35,6 +38,11 @@ public class Data implements MagicFunctions {
 	@Override
 	public ReturnThrowDataSet __notEqual__(Data other) {
 		return BooleanData.valueOf(!this.equals(other)).returnThis();
+	}
+
+	@Override
+	public ReturnThrowDataSet __string__() {
+		return StringData.valueOf(this.toString()).returnThis();
 	}
 
 	public final ReturnThrowDataSet returnThis() {

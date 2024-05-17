@@ -24,6 +24,10 @@ public final class NumberData extends Data {
 		return new NumberData(value);
 	}
 
+	public static NumberData valueOf(String value) {
+		return new NumberData(Double.valueOf(value));
+	}
+
 	static ReturnThrowDataSet returnValue(double value) {
 		return NumberData.valueOf(value).returnThis();
 	}
@@ -58,6 +62,14 @@ public final class NumberData extends Data {
 			return CommonException.CAST_FAILD.throwThis();
 		}
 		return NumberData.returnValue(this.value / numberData.value);
+	}
+
+	@Override
+	public ReturnThrowDataSet __mod__(Data num) {
+		if (!(num instanceof NumberData numberData)) {
+			return CommonException.CAST_FAILD.throwThis();
+		}
+		return NumberData.returnValue(((long) this.value) % ((long) numberData.value));
 	}
 
 	@Override

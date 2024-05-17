@@ -19,7 +19,7 @@
 特殊控制指令都是以@為開頭
 
 暫存區A指定為B
-@MOVE A B
+@SET A B
 
 定義:A為$PC，@LABEL標記的標籤不可以重複
 優化: 如果:A被取代成固定值，則執行程式時會忽略此指令
@@ -145,4 +145,11 @@ cache address
 字串，用雙引號包圍字串，支援跳脫字符(反斜線)
 "text"
 
-
+@IF_FALSE :1  if
+	// do something
+JUMP :END
+@LABEL :1     if_end
+	@IF_FALSE :2
+		// do something
+	@LABEL :2
+@LABEL :END

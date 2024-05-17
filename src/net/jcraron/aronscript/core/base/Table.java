@@ -29,7 +29,9 @@ public final class Table extends Data {
 			stringBuilder.append(entry.getValue());
 			stringBuilder.append(", ");
 		}
-		stringBuilder.delete(stringBuilder.length() - 2, stringBuilder.length());
+		if (map.size() > 0) {
+			stringBuilder.delete(stringBuilder.length() - 2, stringBuilder.length());
+		}
 		stringBuilder.append("]");
 		return stringBuilder.toString();
 	}
@@ -57,10 +59,11 @@ public final class Table extends Data {
 	}
 
 	public ReturnThrowDataSet __index__(Data key) {
-		return ReturnThrowDataSet.returnData(this.map.get(key));
+		return ReturnThrowDataSet.returnData(this.map.getOrDefault(key, Data.NULL));
 	}
 
 	public ReturnThrowDataSet __assign__(Data key, Data value) {
-		return ReturnThrowDataSet.returnData(this.map.put(key, value));
+		Data ret = this.map.put(key, value);
+		return ReturnThrowDataSet.returnData(ret == null ? Data.NULL : ret);
 	}
 }

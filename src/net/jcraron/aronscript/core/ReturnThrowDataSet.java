@@ -3,6 +3,7 @@ package net.jcraron.aronscript.core;
 public final class ReturnThrowDataSet {
 	public final boolean isThrow;
 	public final Data data;
+	public final static ReturnThrowDataSet RETURN_NULL = ReturnThrowDataSet.returnData(null);
 
 	protected ReturnThrowDataSet(boolean isThrow, Data data) {
 		this.isThrow = isThrow;

@@ -5,9 +5,17 @@ import net.jcraron.aronscript.core.base.ClassData;
 interface MagicFunctions {
 
 	public static ReturnThrowDataSet operate(Data self, Operator op, Data... values) {
+		if (self == null) {
+			self = Data.NULL;
+		}
+		for (int index = 0; index < values.length; index++) {
+			if (values[index] == null) {
+				values[index] = Data.NULL;
+			}
+		}
 		switch (op) {
 		case APPLY:
-			return self.__apply__(values[0]);
+			return self.__apply__(values[0], values[1]);
 		case AND:
 			return self.__and__(values[0]);
 		case LEFT_SHIFT:
@@ -58,8 +66,9 @@ interface MagicFunctions {
 			return self.__unaryPlus__();
 		case STRING:
 			return self.__string__();
+		default:
+			return CommonException.OPERATOR_NOT_SUPPERTED.throwThis();
 		}
-		return CommonException.OPERATOR_NOT_SUPPERTED.throwThis();
 	}
 
 	/** @return Non-null */
@@ -79,7 +88,7 @@ interface MagicFunctions {
 	}
 
 	/** @return Non-null */
-	public default ReturnThrowDataSet __apply__(Data args) {
+	public default ReturnThrowDataSet __apply__(Data args, Data code) {
 		return CommonException.OPERATOR_NOT_SUPPERTED.throwThis();
 	}
 
