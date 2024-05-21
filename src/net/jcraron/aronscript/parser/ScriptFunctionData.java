@@ -13,4 +13,9 @@ public abstract class ScriptFunctionData extends FunctionData {
 	public SubString getOriginScript() {
 		return script;
 	}
+
+	@Override
+	public String toString() {
+		return script.toString();
+	}
 }
