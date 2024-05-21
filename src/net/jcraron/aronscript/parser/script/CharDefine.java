@@ -11,6 +11,8 @@ public class CharDefine {
 	public final static int[] BRACKETS_TYPE_QUOTATION = new int[] { '"', '"' };
 	public final static int CHAR_ESCAPE = '\\';
 	public final static int CHAR_END_STATEMENT = ';';
+	public final static String COMMENT_OPENING = "//";
+	public final static int COMMENT_CLOSING = '\n';
 
 	/** be sorted */
 	public final static int[] VALID_SPACES;
@@ -109,4 +111,15 @@ public class CharDefine {
 		return i >= min && i <= max;
 	}
 
+	public static boolean isCommentOpening(CharSequence seq, int startIndex) {
+		if (startIndex + 1 >= seq.length()) {
+			return false;
+		}
+		for (int commentIndex = 0; commentIndex < CharDefine.COMMENT_OPENING.length(); commentIndex++) {
+			if (seq.charAt(startIndex + commentIndex) != CharDefine.COMMENT_OPENING.charAt(commentIndex)) {
+				return false;
+			}
+		}
+		return true;
+	}
 }

@@ -22,8 +22,19 @@ public class StatementSpliterator {
 		LinkedList<SubString> oneLine = new LinkedList<>();
 		boolean isCurlyBracketAtLast = false;
 		boolean shouldAddLine = false;
+		boolean commentMode = false;
 		for (int i = 0; i < string.length(); i++) {
 			int ch = string.charAt(i);
+			if (commentMode) {
+				if (ch == CharDefine.COMMENT_CLOSING) {
+					commentMode = false;
+				}
+				continue;
+			} else if (CharDefine.isCommentOpening(string, i)) {
+				commentMode = true;
+				i += CharDefine.COMMENT_OPENING.length() - 1;
+				continue;
+			}
 			if (CharDefine.isValidSpace(ch)) {
 				continue;
 			}
@@ -144,8 +155,9 @@ public class StatementSpliterator {
 	/**
 	 * @param input with brackets
 	 * @return with brackets
+	 * @throws SyntaxError 
 	 */
-	private static SubString bracket(SubString input) {
+	private static SubString bracket(SubString input) throws SyntaxError {
 		if (CharDefine.isValidOpeningBracket(input.charAt(0)) == null) {
 			throw new RuntimeException("input must have opening brackets");
 		}
@@ -161,6 +173,8 @@ public class StatementSpliterator {
 				} else if (ch == CharDefine.CHAR_ESCAPE) {
 					escMode = !escMode;
 					continue;
+				} else if (ch == '\n') {
+					throw new SyntaxError("Quotes must be on the same line");
 				}
 			} else {
 				int[] bracket = CharDefine.isValidOpeningBracket(ch);
