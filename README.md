@@ -17,6 +17,21 @@ AronScript 腳本語言
 * 部分python的使用習慣
 * lua的metatable的概念
 
+#### Quick start
+* Java version: JavaSE-17
+```java
+FunctionData func = null;
+try {
+  func = AronScriptParser.parseToFunction(new File("/file/", "parse_example_1.as"));
+} catch (IOException e) {
+  e.printStackTrace();
+}
+
+Data env = new Table();
+ReturnThrowDataSet set = func.__apply__(env, null);
+System.out.println("ENV->" + env.toString());
+System.out.println((set.isThrow ? "ERROR->" : "RETURN->") + set.data.toString());
+```
 
 #### finish item
 1. 語法解析
