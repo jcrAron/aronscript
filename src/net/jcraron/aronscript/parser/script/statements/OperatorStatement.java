@@ -76,6 +76,9 @@ public class OperatorStatement implements ValueStatement {
 					}
 					result = Data.operate(self, Operator.ASSIGN, new Data[] { args[0], secondArg.data });
 				} else {
+					if (symbol == Symbol.APPLY && (args[0] instanceof ParamTableData paramTable)) {
+						args[0] = paramTable.toNormal();
+					}
 					result = Data.operate(self, symbol.op, args);
 				}
 				if (result.isThrow) {
