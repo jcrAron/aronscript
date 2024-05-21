@@ -12,9 +12,8 @@ public class CatcherData extends Data {
 	}
 
 	@Override
-	public ReturnThrowDataSet __apply__(Data args, Data code) {
-		ReturnThrowDataSet set = code.__apply__(args, null);
-		return set.isThrow ? ReturnThrowDataSet.returnData(set.data) : ReturnThrowDataSet.RETURN_NULL;
+	public ReturnThrowDataSet __apply__(Data env, Data code) {
+		return code.__apply__(env, null);
 	}
 
 	@Override
