@@ -17,7 +17,7 @@ AronScript 腳本語言
 * 部分python的使用習慣
 * lua的metatable的概念
 
-#### Quick start
+#### Quick start (call aronscript file through Java code)
 * Java version: JavaSE-17
 ```java
 FunctionData func = null;
