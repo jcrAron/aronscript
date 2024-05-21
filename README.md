@@ -11,15 +11,34 @@ AronScript 腳本語言
 #### 動機/目的:
 * 分離軟體核心邏輯及設定檔的腳本
 * 在寫config相關的檔案時，只能用固定值來填寫，無法填寫運算式的痛點
-* python很難用
 
 #### 參考以下語言製作:
 * 部分C語言的語法
 * 部分python的使用習慣
 * lua的metatable的概念
 
+
+#### finish item
+1. 語法解析
+   * for
+   * while
+   * if、if-else、if-else-if
+   * catcher
+   * operators
+2. 基本資料類型操作定義
+   * String
+   * Number
+   * Table
+   * Boolean
+   * Function
+   * null
+
 #### TODO
 1. 語法解析
-2. 優化執行效率
-3. aroncript shell
-4. 移植到C語言
+   * 支援註解語法
+2. import其他檔案功能
+3. 錯誤時，AS的throw項目及例外檢查是否正確
+4. 標準函式庫
+5. 優化執行效率
+6. aroncript shell
+7. 移植到C語言
