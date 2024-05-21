@@ -7,7 +7,7 @@ import net.jcraron.aronscript.core.base.FunctionData;
 
 public class DefineFunction extends Data {
 	public final static Data INSTANCE = new DefineFunction();
-	public final static ClassData CLASS = new ClassData(CatcherData.class);
+	public final static ClassData CLASS = new ClassData(DefineFunction.class);
 
 	private DefineFunction() {
 	}
@@ -19,7 +19,7 @@ public class DefineFunction extends Data {
 
 	@Override
 	public ReturnThrowDataSet __class__() {
-		return CatcherData.CLASS.returnThis();
+		return DefineFunction.CLASS.returnThis();
 	}
 
 	private static class Function extends FunctionData {
@@ -54,15 +54,8 @@ public class DefineFunction extends Data {
 		private Data callArgs;
 
 		Arguments(Data defaultArgs, Data callArgs) {
-			this.defaultArgs = toNormal(defaultArgs);
-			this.callArgs = toNormal(callArgs);
-		}
-
-		private Data toNormal(Data data) {
-			if (data instanceof ParamTableData paramTable) {
-				data = paramTable.toNormal();
-			}
-			return data;
+			this.defaultArgs = defaultArgs;
+			this.callArgs = callArgs;
 		}
 
 		public ReturnThrowDataSet __index__(Data key) {
