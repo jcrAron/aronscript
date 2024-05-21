@@ -35,7 +35,7 @@ AronScript 腳本語言
 
 #### TODO
 1. 語法解析
-   * 支援註解語法
+   * comment語法
 2. import其他檔案功能
 3. 錯誤時，AS的throw項目及例外檢查是否正確
 4. 標準函式庫
