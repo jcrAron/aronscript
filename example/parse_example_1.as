@@ -1,6 +1,6 @@
 error = catcher{
     1+2+3;
-    throw "throw!!!!";
+    // throw "throw!!!!";
 }
 if(error != null){
     return "return error: " + error;
@@ -15,8 +15,17 @@ loop_1: for(i=0;i<40;i+=1){
         env[-i] = i % 3 == 0 || i % 7 == 0;
     }
 }
-newFunction = function(true,false,1+2+-6,a=10,b=20,c=30*60,i=i,[i]="hello"){
-    return env[0];
+//
+1+2+3+4;
+//comment_1
+newFunction = // comment new function
+function(true,false,1+2+- // comment aslkjdhnlaskjdfh  qlwiejhrb 
+6,a=0,b=200,c=30*60,i=i,[i]="hello")
+{
+    if(a<0){
+        throw "error";
+    }
+    return env[0] && a+b+c > 2000;
 }
-
-return (env[23] != null && env[23]) || !env[-23] && newFunction() ;
+ 
+return (env[23] != null && env[23]) || !env[-23] && newFunction(a=-1); ;
