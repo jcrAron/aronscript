@@ -25,6 +25,7 @@ AronScript 腳本語言
    * if、if-else、if-else-if
    * catcher
    * operators
+   * comment
 2. 基本資料類型操作定義
    * String
    * Number
@@ -35,8 +36,8 @@ AronScript 腳本語言
 
 #### TODO
 1. 語法解析
-   * comment語法
-2. import其他檔案功能
+   * 單元測試
+2. import其他檔案
 3. 錯誤時，AS的throw項目及例外檢查是否正確
 4. 標準函式庫
 5. 優化執行效率
