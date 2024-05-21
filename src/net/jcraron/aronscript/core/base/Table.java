@@ -8,9 +8,9 @@ import java.util.Objects;
 import net.jcraron.aronscript.core.Data;
 import net.jcraron.aronscript.core.ReturnThrowDataSet;
 
-public final class Table extends Data {
+public class Table extends Data {
 	public final static ClassData DEFAULT_CLASS = new ClassData(BooleanData.class);
-	private Map<Data, Data> map;
+	protected Map<Data, Data> map;
 
 	public Table(Map<Data, Data> map) {
 		this.map = map;
@@ -63,7 +63,12 @@ public final class Table extends Data {
 	}
 
 	public ReturnThrowDataSet __assign__(Data key, Data value) {
-		Data ret = this.map.put(key, value);
+		Data ret;
+		if (Data.isNull(value)) {
+			ret = this.map.remove(key);
+		} else {
+			ret = this.map.put(key, value);
+		}
 		return ReturnThrowDataSet.returnData(ret == null ? Data.NULL : ret);
 	}
 }

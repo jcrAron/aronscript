@@ -1,9 +1,8 @@
-package net.jcraron.aronscript.core.special;
+package net.jcraron.aronscript.core.base;
 
 import net.jcraron.aronscript.core.CommonException;
 import net.jcraron.aronscript.core.Data;
 import net.jcraron.aronscript.core.ReturnThrowDataSet;
-import net.jcraron.aronscript.core.base.ClassData;
 
 public final class NullData extends Data {
 	public final static Data INSTANCE = new NullData();
@@ -14,12 +13,12 @@ public final class NullData extends Data {
 
 	@Override
 	public String toString() {
-		return "null";
+		return "Data.NULL";
 	}
 
 	@Override
 	public boolean equals(Object obj) {
-		return obj == null || this == obj;
+		return obj == null || obj == this;
 	}
 
 	@Override

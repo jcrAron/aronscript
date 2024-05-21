@@ -2,12 +2,16 @@ package net.jcraron.aronscript.core;
 
 import net.jcraron.aronscript.core.base.BooleanData;
 import net.jcraron.aronscript.core.base.ClassData;
+import net.jcraron.aronscript.core.base.NullData;
 import net.jcraron.aronscript.core.base.NumberData;
 import net.jcraron.aronscript.core.base.StringData;
-import net.jcraron.aronscript.core.special.NullData;
 
 public class Data implements MagicFunctions {
 	public final static Data NULL = NullData.INSTANCE;
+
+	public static boolean isNull(Data data) {
+		return data == null || data == Data.NULL;
+	}
 
 	public ReturnThrowDataSet __class__() {
 		return new ClassData(this.getClass()).returnThis();

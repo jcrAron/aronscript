@@ -5,11 +5,11 @@ import net.jcraron.aronscript.core.base.ClassData;
 interface MagicFunctions {
 
 	public static ReturnThrowDataSet operate(Data self, Operator op, Data... values) {
-		if (self == null) {
+		if (Data.isNull(self)) {
 			self = Data.NULL;
 		}
 		for (int index = 0; index < values.length; index++) {
-			if (values[index] == null) {
+			if (Data.isNull(values[index])) {
 				values[index] = Data.NULL;
 			}
 		}

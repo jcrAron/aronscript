@@ -115,13 +115,13 @@ public class BlockStatement implements Statement {
 		ScriptFunctionData data = new ScriptFunctionData(string) {
 			@Override
 			public ReturnThrowDataSet __apply__(Data args, Data code) {
-				if (code != null) {
-					return ReturnThrowDataSet.throwData(StringData.valueOf("incidental code is not supported"));
+				if (!Data.isNull(code)) {
+					return ReturnThrowDataSet.throwData(StringData.valueOf("call function with code is not supported"));
 				}
 				ControlFlow result = func.run(args);
 				switch (result.type) {
 				case NONE:
-					return ReturnThrowDataSet.returnData(null);
+					return ReturnThrowDataSet.RETURN_NULL;
 				case RETURN:
 				case THROW:
 					return result.toReturnThrowDataSet();
@@ -135,13 +135,13 @@ public class BlockStatement implements Statement {
 		return data;
 	}
 
-	public static ScriptFunctionData toCatcherBlock(SubString string) throws SyntaxError {
+	static ScriptFunctionData toCatcherBlock(SubString string) throws SyntaxError {
 		Statement func = toRunnable(string, false, false, false, true, new HashSet<>());
 		ScriptFunctionData data = new ScriptFunctionData(string) {
 			@Override
 			public ReturnThrowDataSet __apply__(Data args, Data code) {
-				if (code != null) {
-					return ReturnThrowDataSet.throwData(StringData.valueOf("incidental code is not supported"));
+				if (!Data.isNull(code)) {
+					throw new RuntimeException("run catcher with code is not supported");
 				}
 				ControlFlow result = func.run(args);
 				switch (result.type) {
