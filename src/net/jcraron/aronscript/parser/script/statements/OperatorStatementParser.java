@@ -1,6 +1,5 @@
 package net.jcraron.aronscript.parser.script.statements;
 
-import java.util.Arrays;
 import java.util.Deque;
 import java.util.LinkedList;
 import java.util.Stack;
@@ -9,10 +8,9 @@ import net.jcraron.aronscript.core.Data;
 import net.jcraron.aronscript.core.base.BooleanData;
 import net.jcraron.aronscript.core.base.NumberData;
 import net.jcraron.aronscript.core.base.StringData;
-import net.jcraron.aronscript.core.base.Table;
-import net.jcraron.aronscript.core.special.CatcherData;
-import net.jcraron.aronscript.core.special.DefineFunctionData;
-import net.jcraron.aronscript.core.special.NewTableData;
+import net.jcraron.aronscript.core.builtin.CatcherData;
+import net.jcraron.aronscript.core.builtin.DefineFunction;
+import net.jcraron.aronscript.core.builtin.NewTableData;
 import net.jcraron.aronscript.parser.script.CharDefine;
 import net.jcraron.aronscript.parser.script.Symbol;
 import net.jcraron.aronscript.parser.script.exception.SyntaxError;
@@ -21,6 +19,7 @@ import net.jcraron.aronscript.util.SubString;
 
 class OperatorStatementParser {
 	private final static Object ENV = OperatorStatement.ENV;
+	private final static Object NEW_PARAMS_TABLE = OperatorStatement.NEW_PARAMS_TABLE;
 
 	static Deque<Object> parse(SubString[] line) throws SyntaxError {
 		Deque<Object> ret = new LinkedList<>();
@@ -59,11 +58,7 @@ class OperatorStatementParser {
 			itemList.offer(Symbol.SKIP_UNTIL_LOGICAL_OR);
 		}
 		opStack.push(newestSymbol);
-		if (newestSymbol == Symbol.COMMA) {
-//			dataCount -= Symbol.COMMA.argLength;
-		} else {
-			dataCount = dataCount - newestSymbol.argLength + 1;
-		}
+		dataCount = dataCount - newestSymbol.argLength + 1;
 	}
 
 	private Object parseConst(SubString part) {
@@ -74,7 +69,7 @@ class OperatorStatementParser {
 		} else if (part.contentEquals("table")) {
 			return NewTableData.INSTANCE;
 		} else if (part.contentEquals("function")) {
-			return DefineFunctionData.INSTANCE;
+			return DefineFunction.INSTANCE;
 		} else if (part.contentEquals("catcher")) {
 			return CatcherData.INSTANCE;
 		} else if (part.contentEquals("null")) {
@@ -113,6 +108,7 @@ class OperatorStatementParser {
 	private Data parseFunctionBlock(SubString part) throws SyntaxError {
 		return BlockStatement.toFunction(StatementSpliterator.trimBrackets(part));
 	}
+
 	private Data parseCatcherBlock(SubString part) throws SyntaxError {
 		return BlockStatement.toCatcherBlock(StatementSpliterator.trimBrackets(part));
 	}
@@ -122,7 +118,10 @@ class OperatorStatementParser {
 		if (lines.size() > 1) {
 			throw new SyntaxError("");
 		}
-		Data table = newCallTable();
+		addItem(NEW_PARAMS_TABLE);
+		if (lines.size() <= 0) {
+			return;
+		}
 		SubString[] line = lines.get(0);
 		int startIndex = 0;
 		int endIndex = -1;
@@ -131,8 +130,7 @@ class OperatorStatementParser {
 			if (line[index].contentEquals(Symbol.COMMA.symbol)) {
 				startIndex = endIndex + 1;
 				endIndex = index;
-				boolean hasAssign = parsePartOfTable(new SubArray<>(line).subarray(startIndex, endIndex), table,
-						partCounter);
+				boolean hasAssign = parsePartOfTable(new SubArray<>(line).subarray(startIndex, endIndex), partCounter);
 				if (!hasAssign && partCounter >= 0) {
 					partCounter++;
 				} else {
@@ -140,18 +138,16 @@ class OperatorStatementParser {
 				}
 			}
 		}
-		parsePartOfTable(new SubArray<>(line).subarray(endIndex + 1, line.length), table, partCounter);
-		addItem(table);
+		parsePartOfTable(new SubArray<>(line).subarray(endIndex + 1, line.length), partCounter);
 	}
 
 	/** @return true if the array include Symbol.ASSIGN symbol */
-	private boolean parsePartOfTable(SubArray<SubString> array, Data baseTable, int partCount) throws SyntaxError {
+	private boolean parsePartOfTable(SubArray<SubString> array, int partCount) throws SyntaxError {
 		boolean hasAssign = false;
 		Stack<Symbol> opStack = new Stack<>();
 		if (array.index(1).contentEquals(Symbol.ASSIGN.symbol)) {
 			hasAssign = true;
 			SubString firstPart = array.index(0);
-			addItem(baseTable);
 			if (parseConst(firstPart) == null && isName(firstPart)) {
 				addItem(StringData.valueOf(firstPart.toString()));
 			} else if (CharDefine.isValidOpeningBracket(firstPart.charAt(0)) == CharDefine.BRACKETS_TYPE_SQUARE) {
@@ -168,13 +164,9 @@ class OperatorStatementParser {
 		}
 		pushSymbol(opStack, Symbol.ASSIGN);
 		new OperatorStatementParser(this.itemList).parseLine(array.subarray(hasAssign ? 2 : 0).toArray());
-		pushSymbol(opStack, Symbol.COMMA);
+		this.dataCount++;
 		cleanSymbolStack(opStack, Symbol.END);
 		return hasAssign;
-	}
-
-	private Data newCallTable() {
-		return new Table();
 	}
 
 	private void parseLine(SubString[] line) throws SyntaxError {
@@ -259,7 +251,7 @@ class OperatorStatementParser {
 				isSymbolAtLast = false;
 				isConstOrVarAtLast = true;
 			} else if (isConstOrVarAtLast && bracketType == CharDefine.BRACKETS_TYPE_CURLY) {
-				addItem(newCallTable());
+				addItem(NEW_PARAMS_TABLE);
 				cleanSymbolStack(opStack, Symbol.APPLY);
 				addItem(parseFunctionBlock(part));
 				pushSymbol(opStack, Symbol.APPLY);
@@ -274,20 +266,10 @@ class OperatorStatementParser {
 			} else {
 				throw new SyntaxError("unknow part: " + part);
 			}
-			System.out.println("part= " + part);
-			System.out.println("dataCount= " + dataCount);
-			System.out.println("isSymbolAtLast= " + isSymbolAtLast);
-			System.out.println("isConstOrVarAtLast= " + isConstOrVarAtLast);
-			System.out.println("opStack= " + opStack);
 		}
 		cleanSymbolStack(opStack, Symbol.END);
-		System.out.println("itemList= " + itemList);
-		System.out.println("opStack= " + opStack);
-		System.out.println("dataCount= " + dataCount);
 		if (dataCount != 1) {
 			throw new SyntaxError("data and operator is imbalance");
 		}
-		System.out.println("input= " + Arrays.toString(line));
-		System.out.println("output= " + itemList.toString());
 	}
 }

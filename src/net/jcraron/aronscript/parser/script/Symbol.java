@@ -11,7 +11,7 @@ import net.jcraron.aronscript.util.SubString;
 
 public enum Symbol {
 	TO_ENV("..."),
-	COMMA(",", 0, Constants.LEFT_TO_RIGHT, 1, false, null),
+	COMMA(","),
 	END(";"),
 	SKIP_UNTIL_LOGICAL_AND(null, 14, Constants.LEFT_TO_RIGHT, 1, false, null),
 	SKIP_UNTIL_LOGICAL_OR(null, 14, Constants.LEFT_TO_RIGHT, 1, false, null),

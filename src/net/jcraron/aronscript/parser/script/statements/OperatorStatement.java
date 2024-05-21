@@ -2,13 +2,13 @@ package net.jcraron.aronscript.parser.script.statements;
 
 import java.util.Deque;
 import java.util.LinkedList;
-import java.util.Objects;
 
 import net.jcraron.aronscript.core.Data;
 import net.jcraron.aronscript.core.Operator;
 import net.jcraron.aronscript.core.ReturnThrowDataSet;
 import net.jcraron.aronscript.core.base.BooleanData;
 import net.jcraron.aronscript.core.base.StringData;
+import net.jcraron.aronscript.core.builtin.ParamTableData;
 import net.jcraron.aronscript.parser.script.Symbol;
 import net.jcraron.aronscript.parser.script.ValueStatement;
 import net.jcraron.aronscript.parser.script.exception.SyntaxError;
@@ -18,6 +18,7 @@ public class OperatorStatement implements ValueStatement {
 
 	private Deque<Object> list;
 	final static Object ENV = "$ENV";
+	final static Object NEW_PARAMS_TABLE = "NEW_PARAMS_TABLE";
 
 	public OperatorStatement(Deque<Object> list) {
 		this.list = list;
@@ -25,7 +26,6 @@ public class OperatorStatement implements ValueStatement {
 
 	@Override
 	public ReturnThrowDataSet getValue(Data env) {
-		System.out.println("value=> " + list.toString());
 		Deque<Data> variablesStack = new LinkedList<>();
 		Symbol skipMode = null;
 		for (Object object : list) {
@@ -36,7 +36,7 @@ public class OperatorStatement implements ValueStatement {
 				} else if (symbol == Symbol.LOGICAL_OR || symbol == Symbol.LOGICAL_AND) {
 					Data lastData = variablesStack.peekFirst();
 					if (lastData != BooleanData.TRUE && lastData != BooleanData.FALSE) {
-						throw new RuntimeException("");
+						return StringData.valueOf("logical operators must take Boolean values").throwThis();
 					}
 					continue;
 				} else if (skipMode != null) {
@@ -61,14 +61,8 @@ public class OperatorStatement implements ValueStatement {
 					args[i] = variablesStack.pop();
 				}
 				self = variablesStack.pop();
-				if (symbol == Symbol.COMMA) {
-					continue;
-				}
 				if (symbol.op == null) {
 					throw new RuntimeException("");
-				}
-				if (self == null) {
-					return ReturnThrowDataSet.throwData(StringData.valueOf("null pointer exception"));
 				}
 				ReturnThrowDataSet result;
 				if (symbol.withAssign) {
@@ -94,12 +88,12 @@ public class OperatorStatement implements ValueStatement {
 				variablesStack.push(env);
 			} else if (object instanceof Data data) {
 				variablesStack.push(data);
+			} else if (object == NEW_PARAMS_TABLE) {
+				variablesStack.push(new ParamTableData());
 			}
 		}
 		Data result = variablesStack.pop();
-		System.out.println("result env: " + env.toString());
-		System.out.println("result return: " + Objects.toString(result));
-		return result != null ? result.returnThis() : ReturnThrowDataSet.RETURN_NULL;
+		return result.returnThis();
 	}
 
 	static ValueStatement parse(SubString[] line) throws SyntaxError {
