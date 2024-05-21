@@ -42,7 +42,8 @@ public class Main {
 	public static FunctionData test_parse2() {
 		FunctionData func = null;
 		try {
-			func = AronScriptParser.parseToFunction(new File("C:\\Users\\jcrAron\\eclipse-workspace\\aronscript\\example","parse_example_1.as"));
+			func = AronScriptParser.parseToFunction(
+					new File("C:\\Users\\jcrAron\\eclipse-workspace\\aronscript\\example", "parse_example_1.as"));
 		} catch (IOException e) {
 			e.printStackTrace();
 		}

@@ -20,12 +20,12 @@ loop_1: for(i=0;i<40;i+=1){
 //comment_1
 newFunction = // comment new function
 function(true,false,1+2+- // comment aslkjdhnlaskjdfh  qlwiejhrb 
-6,a=0,b=200,c=30*60,i=i,[i]="hello")
+6,a=0,b=200,c=30*60,i=i,[i]="hello")           
 {
     if(a<0){
-        throw "error";
+        throw "in function";
     }
     return env[0] && a+b+c > 2000;
 }
- 
-return (env[23] != null && env[23]) || !env[-23] && newFunction(a=-1); ;
+
+return (env[23] != null && env[23]) || !env[-23] && newFunction(a=1) && table(a=1,b=2,c=3).c == 3;
