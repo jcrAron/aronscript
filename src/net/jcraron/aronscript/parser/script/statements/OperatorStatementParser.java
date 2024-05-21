@@ -145,7 +145,7 @@ class OperatorStatementParser {
 	private boolean parsePartOfTable(SubArray<SubString> array, int partCount) throws SyntaxError {
 		boolean hasAssign = false;
 		Stack<Symbol> opStack = new Stack<>();
-		if (array.index(1).contentEquals(Symbol.ASSIGN.symbol)) {
+		if (array.length() >= 2 && array.index(1).contentEquals(Symbol.ASSIGN.symbol)) {
 			hasAssign = true;
 			SubString firstPart = array.index(0);
 			if (parseConst(firstPart) == null && isName(firstPart)) {
