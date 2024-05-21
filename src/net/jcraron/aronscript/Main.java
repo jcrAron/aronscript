@@ -1,5 +1,7 @@
 package net.jcraron.aronscript;
 
+import java.io.File;
+import java.io.IOException;
 import java.util.Arrays;
 import java.util.LinkedList;
 
@@ -14,14 +16,15 @@ import net.jcraron.aronscript.util.SubString;
 
 public class Main {
 	public static void main(String... strings) throws SyntaxError {
-		LinkedList<FunctionData> keepObject = new LinkedList<>();
+		System.gc();
 //		int test_count = 1_000_000;
 		int test_count = 1;
 		long startTime = System.currentTimeMillis();
 		for (int i = 0; i < test_count; i++) {
-			keepObject.add(test_parse2());
+			test_parse2();
 		}
 		long endTime = System.currentTimeMillis();
+		System.gc();
 		System.out.println("parse time (ms): " + (endTime - startTime));
 	}
 
@@ -37,28 +40,12 @@ public class Main {
 	}
 
 	public static FunctionData test_parse2() {
-		FunctionData func = AronScriptParser.parseToFunction("""
-				error = catcher{
-					1+2+3;
-					throw "throw!!!!";
-				}
-				if(error != null){
-					return "return error: " + error;
-				}
-				loop_1: for(i=0;i<40;i+=1){
-					if_label: if(i>=30){
-						break loop_1;
-					}
-					if(i % 3 == 0 || i % 7 == 0){
-						env[i] = true;
-					}else {
-						env[-i] = i % 3 == 0 || i % 7 == 0;
-					}
-				}
-				function(a=10,b=20,c=30*60,i=i,[i]="hello"){
-				}
-				return (env[23] != null && env[23]) || !env[-23] ;
-				""");
+		FunctionData func = null;
+		try {
+			func = AronScriptParser.parseToFunction(new File("C:\\Users\\jcrAron\\eclipse-workspace\\aronscript\\example","parse_example_1.as"));
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
 
 		Data env = new Table();
 		ReturnThrowDataSet set = func.__apply__(env, null);
