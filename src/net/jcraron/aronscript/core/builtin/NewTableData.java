@@ -1,4 +1,4 @@
-package net.jcraron.aronscript.core.special;
+package net.jcraron.aronscript.core.builtin;
 
 import net.jcraron.aronscript.core.Data;
 import net.jcraron.aronscript.core.ReturnThrowDataSet;
