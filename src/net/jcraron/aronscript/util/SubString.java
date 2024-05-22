@@ -1,7 +1,7 @@
 package net.jcraron.aronscript.util;
 
 public class SubString implements CharSequence {
-	public final static SubString EMPTY = new SubString(String.valueOf(""));
+	public final static SubString EMPTY = new SubString("");
 	private String string;
 	private int offset;
 	private int length;
@@ -118,9 +118,9 @@ public class SubString implements CharSequence {
 	@Override
 	public int hashCode() {
 		int hash = 0;
-        for (int i = 0; i < length; i++) {
-        	hash = 31 * hash + this.charAt(i);
-        }
+		for (int i = 0; i < length; i++) {
+			hash = 31 * hash + this.charAt(i);
+		}
 		return hash;
 	}
 
