@@ -52,7 +52,7 @@ public final class StringData extends Data {
 
 	@Override
 	public String toString() {
-		return '"' + string + '"';
+		return string ;
 	}
 
 	@Override
