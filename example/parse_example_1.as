@@ -17,6 +17,7 @@ loop_1: for(i=0;i<40;i+=1){
 }
 //
 1+2+3+4;
+imp = import("example_2.as");
 //comment_1
 newFunction = // comment new function
 function(true,false,1+2+- // comment aslkjdhnlaskjdfh  qlwiejhrb 
@@ -27,5 +28,4 @@ function(true,false,1+2+- // comment aslkjdhnlaskjdfh  qlwiejhrb
     }
     return env[0] && a+b+c > 2000;
 }
-
 return (env[23] != null && env[23]) || !env[-23] && newFunction(a=1) && table(a=1,b=2,c=3).c == 3;
