@@ -5,12 +5,10 @@ import java.util.LinkedList;
 import java.util.Stack;
 
 import net.jcraron.aronscript.core.Data;
-import net.jcraron.aronscript.core.base.BooleanData;
 import net.jcraron.aronscript.core.base.NumberData;
 import net.jcraron.aronscript.core.base.StringData;
-import net.jcraron.aronscript.core.builtin.CatcherData;
-import net.jcraron.aronscript.core.builtin.DefineFunction;
-import net.jcraron.aronscript.core.builtin.NewTableData;
+import net.jcraron.aronscript.core.builtin.BuiltInRegistry;
+import net.jcraron.aronscript.core.builtin.CatcherBlock;
 import net.jcraron.aronscript.parser.script.CharDefine;
 import net.jcraron.aronscript.parser.script.Symbol;
 import net.jcraron.aronscript.parser.script.exception.SyntaxError;
@@ -18,6 +16,7 @@ import net.jcraron.aronscript.util.SubArray;
 import net.jcraron.aronscript.util.SubString;
 
 class OperatorStatementParser {
+	private final static String CONST_NAME_ENV = "env";
 	private final static Object ENV = OperatorStatement.ENV;
 	private final static Object NEW_PARAMS_TABLE = OperatorStatement.NEW_PARAMS_TABLE;
 
@@ -62,22 +61,10 @@ class OperatorStatementParser {
 	}
 
 	private Object parseConst(SubString part) {
-		if (part.contentEquals("env")) {
+		if (part.contentEquals(CONST_NAME_ENV)) {
 			return ENV;
-		} else if (part.contentEquals("import")) {
-			return null; // TODO
-		} else if (part.contentEquals("table")) {
-			return NewTableData.INSTANCE;
-		} else if (part.contentEquals("function")) {
-			return DefineFunction.INSTANCE;
-		} else if (part.contentEquals("catcher")) {
-			return CatcherData.INSTANCE;
-		} else if (part.contentEquals("null")) {
-			return Data.NULL;
-		} else if (part.contentEquals("true")) {
-			return BooleanData.TRUE;
-		} else if (part.contentEquals("false")) {
-			return BooleanData.FALSE;
+		} else if (BuiltInRegistry.getBuiltInData(part) != null) {
+			return BuiltInRegistry.getBuiltInData(part);
 		} else if (CharDefine.isValidOpeningBracket(part.charAt(0)) == CharDefine.BRACKETS_TYPE_QUOTATION) {
 			return StringData.valueOf(StatementSpliterator.trimBrackets(part).toString());
 		} else if (CharDefine.isNumber(part.charAt(0))) {
@@ -191,7 +178,7 @@ class OperatorStatementParser {
 				isConstOrVarAtLast = true;
 			} else if (isSymbolAtLast && !isIndexMode && constant != null) {
 				// constant
-				if (constant == CatcherData.INSTANCE) {
+				if (constant == CatcherBlock.INSTANCE) {
 					if (index + 1 >= line.length) {
 						throw new SyntaxError("");
 					}
@@ -200,7 +187,7 @@ class OperatorStatementParser {
 					if (nextPartBracketType != CharDefine.BRACKETS_TYPE_CURLY) {
 						throw new SyntaxError("");
 					}
-					addItem(CatcherData.INSTANCE);
+					addItem(CatcherBlock.INSTANCE);
 					cleanSymbolStack(opStack, Symbol.APPLY);
 					addItem(ENV);
 					addItem(parseCatcherBlock(nextPart));
