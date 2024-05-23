@@ -10,25 +10,25 @@ import net.jcraron.aronscript.core.base.FunctionData;
 import net.jcraron.aronscript.parser.AronScriptParser;
 
 public class AronScriptExecutor extends Thread {
-	private final ExecutorConfig config;
+	private final CoreConfigs config;
 
-	public AronScriptExecutor(ExecutorConfig config, FunctionData function, Data env) {
+	public AronScriptExecutor(CoreConfigs config, FunctionData function, Data env) {
 		super(() -> runFunction(function, env));
-		this.config = config != null ? ExecutorConfig.newDefaultConfig() : config;
+		this.config = config != null ? CoreConfigs.newDefaultConfig() : config;
 	}
 
-	public static AronScriptExecutor newExecutor(ExecutorConfig config, File file, Data env)
+	public static AronScriptExecutor newExecutor(CoreConfigs config, File file, Data env)
 			throws FileNotFoundException, IOException {
 		FunctionData func = AronScriptParser.parseToFunction(file);
 		return new AronScriptExecutor(config, func, env);
 	}
 
-	public static AronScriptExecutor newExecutor(ExecutorConfig config, String script, Data env) {
+	public static AronScriptExecutor newExecutor(CoreConfigs config, String script, Data env) {
 		FunctionData func = AronScriptParser.parseToFunction(script);
 		return new AronScriptExecutor(config, func, env);
 	}
 
-	public ExecutorConfig getConfig() {
+	public CoreConfigs getConfig() {
 		return config;
 	}
 

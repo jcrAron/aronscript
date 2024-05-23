@@ -4,11 +4,11 @@ import net.jcraron.aronscript.core.Data;
 import net.jcraron.aronscript.core.ReturnThrowDataSet;
 import net.jcraron.aronscript.core.base.ClassData;
 
-public class CatcherData extends Data {
-	public final static Data INSTANCE = new CatcherData();
-	public final static ClassData CLASS = new ClassData(CatcherData.class);
+public class CatcherBlock extends Data {
+	public final static Data INSTANCE = new CatcherBlock();
+	public final static ClassData CLASS = new ClassData(CatcherBlock.class);
 
-	private CatcherData() {
+	private CatcherBlock() {
 	}
 
 	@Override
@@ -18,6 +18,6 @@ public class CatcherData extends Data {
 
 	@Override
 	public ReturnThrowDataSet __class__() {
-		return CatcherData.CLASS.returnThis();
+		return CatcherBlock.CLASS.returnThis();
 	}
 }

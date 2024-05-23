@@ -5,11 +5,11 @@ import net.jcraron.aronscript.core.ReturnThrowDataSet;
 import net.jcraron.aronscript.core.base.ClassData;
 import net.jcraron.aronscript.core.base.FunctionData;
 
-public class DefineFunction extends Data {
-	public final static Data INSTANCE = new DefineFunction();
-	public final static ClassData CLASS = new ClassData(DefineFunction.class);
+public class FunctionLib extends Data {
+	public final static Data INSTANCE = new FunctionLib();
+	public final static ClassData CLASS = new ClassData(FunctionLib.class);
 
-	private DefineFunction() {
+	private FunctionLib() {
 	}
 
 	@Override
@@ -19,7 +19,7 @@ public class DefineFunction extends Data {
 
 	@Override
 	public ReturnThrowDataSet __class__() {
-		return DefineFunction.CLASS.returnThis();
+		return FunctionLib.CLASS.returnThis();
 	}
 
 	private static class Function extends FunctionData {

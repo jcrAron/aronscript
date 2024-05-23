@@ -4,11 +4,11 @@ import net.jcraron.aronscript.core.Data;
 import net.jcraron.aronscript.core.ReturnThrowDataSet;
 import net.jcraron.aronscript.core.base.ClassData;
 
-public class NewTableData extends Data {
-	public final static Data INSTANCE = new NewTableData();
-	public final static ClassData CLASS = new ClassData(NewTableData.class);
+public class TableLib extends Data {
+	public final static Data INSTANCE = new TableLib();
+	public final static ClassData CLASS = new ClassData(TableLib.class);
 
-	private NewTableData() {
+	private TableLib() {
 	}
 
 	@Override
@@ -24,6 +24,6 @@ public class NewTableData extends Data {
 
 	@Override
 	public ReturnThrowDataSet __class__() {
-		return NewTableData.CLASS.returnThis();
+		return TableLib.CLASS.returnThis();
 	}
 }

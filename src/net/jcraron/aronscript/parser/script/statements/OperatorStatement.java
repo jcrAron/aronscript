@@ -1,6 +1,7 @@
 package net.jcraron.aronscript.parser.script.statements;
 
 import java.util.Deque;
+import java.util.HashMap;
 import java.util.LinkedList;
 
 import net.jcraron.aronscript.core.Data;
@@ -8,7 +9,7 @@ import net.jcraron.aronscript.core.Operator;
 import net.jcraron.aronscript.core.ReturnThrowDataSet;
 import net.jcraron.aronscript.core.base.BooleanData;
 import net.jcraron.aronscript.core.base.StringData;
-import net.jcraron.aronscript.core.builtin.ParamTableData;
+import net.jcraron.aronscript.core.base.Table;
 import net.jcraron.aronscript.parser.script.Symbol;
 import net.jcraron.aronscript.parser.script.ValueStatement;
 import net.jcraron.aronscript.parser.script.exception.SyntaxError;
@@ -105,4 +106,20 @@ public class OperatorStatement implements ValueStatement {
 	}
 
 	/*----------------------------------------------------------------------------------------------------------------*/
+	private static class ParamTableData extends Table {
+		public ParamTableData() {
+			super(new HashMap<>());
+		}
+
+		@Override
+		public ReturnThrowDataSet __assign__(Data key, Data value) {
+			this.map.put(key, value);
+			return this.returnThis();
+		}
+
+		public Table toNormal() {
+			return new Table(this.map);
+		}
+	}
+
 }
