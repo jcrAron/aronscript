@@ -2,9 +2,11 @@ error = catcher{
     1+2+3;
     // throw "throw!!!!";
 }
+
 if(error != null){
     return "return error: " + error;
 }
+
 loop_1: for(i=0;i<40;i+=1){
     if_label: if(i>=30){
         break loop_1;
@@ -28,4 +30,12 @@ function(true,false,1+2+- // comment aslkjdhnlaskjdfh  qlwiejhrb
     }
     return env[0] && a+b+c > 2000;
 }
-return (env[23] != null && env[23]) || !env[-23] && newFunction(a=1) && table(a=1,b=2,c=3).c == 3;
+
+
+
+result = table();
+result.bool = (env[23] != null && env[23]) || !env[-23] && newFunction(a=1) && table(a=1,b=2,c=3).c == 3;
+result.myTable = table(tableIndex=30);
+result.myfunction = newFunction;
+
+return result; 
