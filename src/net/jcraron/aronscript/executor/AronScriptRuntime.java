@@ -6,34 +6,40 @@ import java.util.HashMap;
 import java.util.Map;
 
 import net.jcraron.aronscript.core.Data;
+import net.jcraron.aronscript.core.stdlib.Printer;
 
 public class AronScriptRuntime {
 	private final static AronScriptRuntime DEFAULT_CONFIG = AronScriptRuntime.newDefaultConfig();
 
 	public final static String DEFAULT_ROOT = "AronScript_root";
 	public final static String DEFAULT_PACKAGE_PATH = "AronScript_path";
-	public final static String DEFAULT_ROOT_LIB = "stdlib";
+	private final static String PREFIX_STDLIB = "stdlib";
 
 	private boolean enableImport;
 	private String packageRoot;
 	private String root;
+	private Map<String, Data> importPackages;
 	/** immutable */
-	private Map<String, Data> preloadPackage;
+	private Map<String, Data> preloadPackages;
 
 	public boolean isEnableImport() {
 		return enableImport;
 	}
 
 	public String getStandardLib() {
-		return new File(this.root, DEFAULT_ROOT_LIB).getAbsolutePath();
+		return new File(this.root, PREFIX_STDLIB).getAbsolutePath();
 	}
 
 	public String getPackagePath() {
 		return packageRoot;
 	}
 
-	public Map<String, Data> getPreloadPackage() {
-		return preloadPackage;
+	public Map<String, Data> getPreloadPackages() {
+		return preloadPackages;
+	}
+
+	public Map<String, Data> getImportedPackages() {
+		return importPackages;
 	}
 
 	public static AronScriptRuntime newDefaultConfig() {
@@ -41,7 +47,10 @@ public class AronScriptRuntime {
 		config.enableImport = true;
 		config.root = System.getenv(DEFAULT_ROOT);
 		config.packageRoot = System.getenv(DEFAULT_PACKAGE_PATH);
-		config.preloadPackage = Collections.unmodifiableMap(new HashMap<>()); // TODO
+		Map<String, Data> preload = new HashMap<>();
+		preload.put(PREFIX_STDLIB + "/printer", Printer.INSTANCE);
+		config.preloadPackages = Collections.unmodifiableMap(preload); // TODO
+		config.importPackages = new HashMap<>();
 		return config;
 	}
 
