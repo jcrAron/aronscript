@@ -25,10 +25,6 @@ public class Data implements MagicFunctions {
 		return MagicFunctions.operate(this, op, values);
 	}
 
-	public final ReturnThrowDataSet operate(String op, Data... values) {
-		return MagicFunctions.operate(this, Operator.find(op), values);
-	}
-
 	@Override
 	public ReturnThrowDataSet __hash__() {
 		return NumberData.valueOf(this.hashCode()).returnThis();
