@@ -7,8 +7,8 @@ import java.util.Map;
 
 import net.jcraron.aronscript.core.Data;
 
-public class CoreConfigs {
-	private final static CoreConfigs DEFAULT_CONFIG = CoreConfigs.newDefaultConfig();
+public class AronScriptRuntime {
+	private final static AronScriptRuntime DEFAULT_CONFIG = AronScriptRuntime.newDefaultConfig();
 
 	public final static String DEFAULT_ROOT = "AronScript_root";
 	public final static String DEFAULT_PACKAGE_PATH = "AronScript_path";
@@ -36,8 +36,8 @@ public class CoreConfigs {
 		return preloadPackage;
 	}
 
-	public static CoreConfigs newDefaultConfig() {
-		CoreConfigs config = new CoreConfigs();
+	public static AronScriptRuntime newDefaultConfig() {
+		AronScriptRuntime config = new AronScriptRuntime();
 		config.enableImport = true;
 		config.root = System.getenv(DEFAULT_ROOT);
 		config.packageRoot = System.getenv(DEFAULT_PACKAGE_PATH);
@@ -45,7 +45,7 @@ public class CoreConfigs {
 		return config;
 	}
 
-	public static CoreConfigs getCurrentConfig() {
+	public static AronScriptRuntime getCurrentConfig() {
 		if (Thread.currentThread() instanceof AronScriptExecutor executor) {
 			return executor.getConfig();
 		}
