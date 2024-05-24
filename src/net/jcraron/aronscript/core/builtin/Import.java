@@ -9,7 +9,7 @@ import net.jcraron.aronscript.core.base.ClassData;
 import net.jcraron.aronscript.core.base.NumberData;
 import net.jcraron.aronscript.core.base.StringData;
 import net.jcraron.aronscript.core.base.Table;
-import net.jcraron.aronscript.executor.CoreConfigs;
+import net.jcraron.aronscript.executor.AronScriptRuntime;
 import net.jcraron.aronscript.parser.AronScriptParser;
 
 public class Import extends Data {
@@ -22,7 +22,7 @@ public class Import extends Data {
 
 	@Override
 	public ReturnThrowDataSet __apply__(Data args, Data code) {
-		CoreConfigs config = CoreConfigs.getCurrentConfig();
+		AronScriptRuntime config = AronScriptRuntime.getCurrentConfig();
 		if (!Data.isNull(code)) {
 			return ReturnThrowDataSet.throwData(StringData.valueOf("error"));
 		} else if (!config.isEnableImport()) {
@@ -33,18 +33,29 @@ public class Import extends Data {
 			return mainSet;
 		}
 		String main = mainSet.data.toString();
-		Data data = config.getPreloadPackage().get(main);
-		if (data != null) {
-			return data.returnThis();
-		} else if (main.startsWith(PREFIX_STDLIB)) {
-			return importStdlib(main.toString());
-		} else {
-			return importFile(main.toString());
+		Data preload = config.getPreloadPackages().get(main);
+		if (preload != null) {
+			return preload.returnThis();
 		}
+		Data imported = config.getImportedPackages().get(main);
+		if (imported != null) {
+			return imported.returnThis();
+		}
+
+		ReturnThrowDataSet loadResult = null;
+		if (main.startsWith(PREFIX_STDLIB)) {
+			loadResult = importStdlib(main.toString());
+		} else {
+			loadResult = importFile(main.toString());
+		}
+		if (!loadResult.isThrow) {
+			config.getImportedPackages().put(main, loadResult.data);
+		}
+		return loadResult;
 	}
 
 	private ReturnThrowDataSet importStdlib(String main) {
-		String root = CoreConfigs.getCurrentConfig().getStandardLib();
+		String root = AronScriptRuntime.getCurrentConfig().getStandardLib();
 		File file = new File(root, main);
 		if (!file.exists()) {
 			throw new RuntimeException("not found package: " + file.getAbsolutePath());
@@ -59,7 +70,7 @@ public class Import extends Data {
 	}
 
 	private ReturnThrowDataSet importFile(String main) {
-		String root = CoreConfigs.getCurrentConfig().getPackagePath();
+		String root = AronScriptRuntime.getCurrentConfig().getPackagePath();
 		File file = new File(root, main);
 		if (!file.exists()) {
 			throw new RuntimeException("not found package: " + file.getAbsolutePath());
