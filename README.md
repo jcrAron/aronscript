@@ -22,7 +22,7 @@ AronScript 腳本語言
 ```java
 FunctionData func = null;
 try {
-  func = AronScriptParser.parseToFunction(new File("/dir/", "parse_example_1.as"));
+  func = AronScriptParser.parseToFunction(new File("/dir/", "example_1.as"));
 } catch (IOException e) {
   e.printStackTrace();
 }
