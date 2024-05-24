@@ -22,7 +22,7 @@ AronScript 腳本語言
 ```java
 FunctionData func = null;
 try {
-  func = AronScriptParser.parseToFunction(new File("/dir/", "parse_example_1.as"));
+  func = AronScriptParser.parseToFunction(new File("/dir/", "example_1.as"));
 } catch (IOException e) {
   e.printStackTrace();
 }
@@ -48,14 +48,20 @@ System.out.println((set.isThrow ? "ERROR->" : "RETURN->") + set.data.toString())
    * Boolean
    * Function
    * null
+3. import其他AS檔案
 
 #### TODO
 1. 語法解析
    * 單元測試
    * AS的throw項目及例外檢查是否正確
-2. import其他檔案
-4. document撰寫
-6. 標準函式庫
-7. 優化執行效率
-8. aroncript shell
-9. 移植到C語言
+3. document撰寫
+4. 標準函式庫
+   * printer (to console)
+   * input (from console)
+   * arguments (at startup)
+   * string (static function)
+   * number (static function)
+   * table (static function)
+5. 優化執行效率
+6. aroncript shell
+7. 移植到C語言
