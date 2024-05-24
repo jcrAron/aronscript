@@ -20,9 +20,9 @@ loop_1: for(i=0;i<40;i+=1){
 //
 1+2+3+4;
 imp = import("example_2.as");
-//comment_1
-newFunction = // comment new function
-function(true,false,1+2+- // comment aslkjdhnlaskjdfh  qlwiejhrb 
+//comment 1
+newFunction = // comment 2
+function(true,false,1+2+- // comment 3
 6,a=0,b=200,c=30*60,i=i,[i]="hello")           
 {
     if(a<0){
