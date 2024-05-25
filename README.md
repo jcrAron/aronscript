@@ -19,6 +19,8 @@ AronScript 腳本語言
 #### Quick start (call aronscript file through Java code)
 * [example_1.as](example/example_1.as)
 * Java version: JavaSE-17
+* variables:
+  * AronScript_Path=C:\Users\default\example
 ```java
 import java.io.File;
 import java.io.IOException;
@@ -33,7 +35,7 @@ public class Main {
 	public static void main(String... strings) {
 		try {
 			FunctionData func = AronScriptParser.parseToFunction(
-					new File("C:\\Users\\jcrAron\\eclipse-workspace\\aronscript\\example", "example_1.as"));
+					new File("C:\\Users\\default\\example", "example_1.as"));
 			Data env = new Table();
 			ReturnThrowDataSet set = func.__apply__(env, null);
 			System.out.println("ENV->" + env.toString());
