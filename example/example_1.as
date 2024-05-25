@@ -15,9 +15,8 @@ error = catcher{
     errorFunction(a=false);
     throw "throw!!!!";
 }
-
-if(error != null){
-    return "return error: " + error;
+if(error!=null){
+    print("print error: " + error);
 }
 
 loop_1: for(i=0;i<40;i+=1){
