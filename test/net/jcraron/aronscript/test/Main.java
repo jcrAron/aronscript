@@ -1,4 +1,4 @@
-package net.jcraron.aronscript;
+package net.jcraron.aronscript.test;
 
 import java.io.File;
 import java.io.IOException;
@@ -24,7 +24,7 @@ public class Main {
 		FunctionData func = null;
 		try {
 			func = AronScriptParser.parseToFunction(
-					new File("C:\\Users\\default\\example", "example_1.as"));
+					new File("C:\\Users\\jcrAron\\eclipse-workspace\\aronscript\\example", "example_1.as"));
 			Data env = new Table();
 			ReturnThrowDataSet set = func.__apply__(env, null);
 			System.out.println("ENV->" + env.toString());
