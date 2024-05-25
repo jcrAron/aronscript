@@ -1,5 +1,6 @@
 package net.jcraron.aronscript.parser.script.statements;
 
+import java.util.Arrays;
 import java.util.Deque;
 import java.util.LinkedList;
 import java.util.Stack;
@@ -140,7 +141,7 @@ class OperatorStatementParser {
 			} else if (CharDefine.isValidOpeningBracket(firstPart.charAt(0)) == CharDefine.BRACKETS_TYPE_SQUARE) {
 				parseOperatorPart(firstPart);
 			} else {
-				throw new SyntaxError("");
+				throw new SyntaxError(firstPart.toString());
 			}
 		} else {
 			if (partCount < 0) {
@@ -256,7 +257,7 @@ class OperatorStatementParser {
 		}
 		cleanSymbolStack(opStack, Symbol.END);
 		if (dataCount != 1) {
-			throw new SyntaxError("data and operator is imbalance");
+			throw new SyntaxError("data and operator is imbalance: " + Arrays.toString(line));
 		}
 	}
 }

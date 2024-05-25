@@ -1,6 +1,19 @@
+print = import("stdlib/printer");
+errorFunction = function(a=true, b=0 , print=print){
+    b+=1;
+    print(b);
+    if(!a){
+        throw "a is false!";
+    }
+}
+
 error = catcher{
     1+2+3;
-    // throw "throw!!!!";
+    errorFunction();
+    errorFunction();
+    errorFunction();
+    errorFunction(a=false);
+    throw "throw!!!!";
 }
 
 if(error != null){
@@ -23,7 +36,7 @@ imp = import("example_2.as");
 //comment 1
 newFunction = // comment 2
 function(true,false,1+2+- // comment 3
-6,a=0,b=200,c=30*60,i=i,[i]="hello")           
+6,a=0,b=200,c=30*60,i=i,[i]="hello")
 {
     if(a<0){
         throw "in function";
