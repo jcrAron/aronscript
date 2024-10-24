@@ -38,7 +38,7 @@ a=30, b=12
 a=1, b=null
 
 --- continue, break ---
-與 java 不同的是，continue 及 break 目前不支援label的語法
+與 java 語法相同不同的是
 - continue 將會跳過此次執行BODY中後續的內容
 - break 將會跳出當前迴圈
 
